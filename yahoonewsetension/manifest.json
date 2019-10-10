@@ -1,0 +1,13 @@
+{
+  "name": "Sample Yahoonews Extension",
+  "description": "remove some parts and plus gragh what news you watch",
+  "version": "0.1",
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "matches": ["https://news.yahoo.co.jp/*", "https://headlines.yahoo.co.jp/*"],
+      "js": ["Chart.bundle.min.js", "content_script.js"]
+    }
+  ],
+  "web_accessible_resources": ["index.html"]
+}
