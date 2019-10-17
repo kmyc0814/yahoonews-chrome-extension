@@ -9,5 +9,9 @@
       "js": ["Chart.bundle.min.js", "content_script.js"]
     }
   ],
-  "web_accessible_resources": ["index.html"]
+  "web_accessible_resources": ["index.html"],
+  "permissions": [
+    "storage"
+  ]
+
 }
