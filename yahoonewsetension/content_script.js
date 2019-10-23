@@ -22,36 +22,44 @@ data5 = value.key5;
 
 //更新する
 if(!value.key1){
-  data1 = 0;
+  value.key1 = 0;
+  console.log(value.key1);
 }
+
 if(!value.key2){
-  data2 = 0;
+  value.key2 = 0;
 }
 if(!value.key3){
-  data3 = 0;
+  value.key3 = 0;
 }
 if(!value.key4){
-  data4 = 0;
+  value.key4 = 0;
 }
 if(!value.key5){
-  data5 = 0;
+  value.key5 = 0;
 }
 
 if(index == 1 ||index == 8 || index == 9){
   chrome.storage.local.get("key1", function (value) {
-    data1 = value.key1;
+    // data1 = value.key1;
     if(!value.key1){
       data1 = 1;
+      chrome.storage.local.set({'key1': data1}, function () {
+        console.log(data1);
+      });
+      console.log(data1);
     }else{
       data1 = data1 + 1;
+      chrome.storage.local.set({'key1': data1}, function () {
+        console.log(data1);
+      });
+      console.log(data1);
     }
-chrome.storage.local.set({'key1': data1}, function () {
-  console.log(data1);
-});
+
 });}
 if(index == 2){
   chrome.storage.local.get("key2", function (value) {
-    data2 = value.key2;
+    // data2 = value.key2;
       if(!value.key2){
       data2 = 1;
     }else{
@@ -94,99 +102,102 @@ if(index == 6 ||index == 7){
     chrome.storage.local.set({'key5': data5}, function () {
     });
       });}
+
+      //表示
+
+       let element1 = document.createElement("div");// <div></div>
+       // element1.className = "newscount"
+       element1.textContent =
+         "国内・地域・ライフ:"+value.key1+"回"
+        +"\n国際:"+value.key2+"回"
+        +"\n経済:"+value.key3+"回"
+        +"\nエンタメ・スポーツ:"+value.key4+"回"
+        +"\nＩＴ・科学:"+value.key5+"回";
+        let target = document.querySelector("#msthd");
+        target.appendChild(element1);
+
+
+      //背景色の変化
+      var balance = [data1, data2, data3, data4, data5];
+      let max = Math.max.apply(null, balance);
+      let min = Math.min.apply(null, balance);
+
+      let minindex = balance.indexOf(min);// 閲覧回数が最小のカテゴリー:0~4
+      // let maxindex = balance.indexOf(max);
+
+      //おすすめボタン
+      let element3 =document.createElement("button");
+      element3.id = "osbutton";
+      element3.style.backgroundColor = "blue";
+      element3.style.color = "white";
+      target.appendChild(element3);
+
+        if(minindex == 0){//国内・地域・ライフがminのとき
+          element3.textContent = "おすすめ→国内";
+          document.getElementById("osbutton").onclick = function() {
+        window.location.href = 'https://news.yahoo.co.jp/categories/domestic';
+          // window.location.href = 'パス名'; // 通常の遷移
+          // window.open('パス名', '_blank'); // 新しいタブを開き、ページを表示
+        }};
+        if(minindex == 1){//国際がminのとき
+          element3.textContent = "おすすめ→国際";
+          document.getElementById("osbutton").onclick = function() {
+          window.location.href = 'https://news.yahoo.co.jp/categories/world';
+        }};
+        if(minindex == 2){//経済がminのとき
+          element3.textContent = "おすすめ→経済";
+          document.getElementById("osbutton").onclick = function() {
+          window.location.href = 'https://news.yahoo.co.jp/categories/business';
+        }};
+        if(minindex == 3){//スポーツ・エンタメがminのとき
+          element3.textContent = "おすすめ→スポーツ";
+          document.getElementById("osbutton").onclick = function() {
+          window.location.href = 'https://news.yahoo.co.jp/categories/entertainment';
+        }};
+        if(minindex == 4){//IT・科学がminのとき
+          element3.textContent = "おすすめ→IT";
+          document.getElementById("osbutton").onclick = function() {
+          window.location.href = 'https://news.yahoo.co.jp/categories/it';
+        }};
+
+
+
+      console.log(minindex);
+      console.log(max);
+      console.log(min);
+      console.log(min / max);
+
+
+      if((min / max <= 0.3)){
+        console.log("偏ってる！")
+        // document.body.style.backgroundColor = "#ccffcc";
+        var obj = document.getElementById("wrapper");
+        obj.style.color = '#ffffff';            //文字色を白にする
+        obj.style.backgroundColor = '#ff0000';  //背景色を赤にする
+        var obj2 = document.getElementById("contents");
+        obj2.style.color = '#ffffff';            //文字色を白にする
+        obj2.style.backgroundColor = '#ff0000';  //背景色を赤にする
+
+
+        //
+      }else if(min / max <= 0.5){
+        console.log("微妙です")
+      }else if(min / max <= 0.7){
+        console.log("あんまり偏ってない")
+      }
+
 });
 
-chrome.storage.local.get(["key1", "key2", "key3","key4","key5"], function (value) {
-  data1 = value.key1;
-  data2 = value.key2;
-  data3 = value.key3;
-  data4 = value.key4;
-  data5 = value.key5;
-
-//表示
-
- let element1 = document.createElement("div");// <div></div>
- // element1.className = "newscount"
- element1.textContent =
-   "国内・地域・ライフ:"+data1+"回"
-  +"\n国際:"+data2+"回"
-  +"\n経済:"+data3+"回"
-  +"\nエンタメ・スポーツ:"+data4+"回"
-  +"\nＩＴ・科学:"+data5+"回";
-  let target = document.querySelector("#msthd");
-  target.appendChild(element1);
+// chrome.storage.local.get(["key1", "key2", "key3","key4","key5"], function (value) {
+//   data1 = value.key1;
+//   data2 = value.key2;
+//   data3 = value.key3;
+//   data4 = value.key4;
+//   data5 = value.key5;
 
 
-//背景色の変化
-var balance = [data1, data2, data3, data4, data5];
-let max = Math.max.apply(null, balance);
-let min = Math.min.apply(null, balance);
-
-let minindex = balance.indexOf(min);// 閲覧回数が最小のカテゴリー:0~4
-// let maxindex = balance.indexOf(max);
-
-//おすすめボタン
-let element3 =document.createElement("button");
-element3.id = "osbutton";
-element3.style.backgroundColor = "blue";
-element3.style.color = "white";
-target.appendChild(element3);
-
-  if(minindex == 0){//国内・地域・ライフがminのとき
-    element3.textContent = "おすすめ→国内";
-    document.getElementById("osbutton").onclick = function() {
-  window.location.href = 'https://news.yahoo.co.jp/categories/domestic';
-    // window.location.href = 'パス名'; // 通常の遷移
-    // window.open('パス名', '_blank'); // 新しいタブを開き、ページを表示
-  }};
-  if(minindex == 1){//国際がminのとき
-    element3.textContent = "おすすめ→国際";
-    document.getElementById("osbutton").onclick = function() {
-    window.location.href = 'https://news.yahoo.co.jp/categories/world';
-  }};
-  if(minindex == 2){//経済がminのとき
-    element3.textContent = "おすすめ→経済";
-    document.getElementById("osbutton").onclick = function() {
-    window.location.href = 'https://news.yahoo.co.jp/categories/business';
-  }};
-  if(minindex == 3){//スポーツ・エンタメがminのとき
-    element3.textContent = "おすすめ→スポーツ";
-    document.getElementById("osbutton").onclick = function() {
-    window.location.href = 'https://news.yahoo.co.jp/categories/entertainment';
-  }};
-  if(minindex == 4){//IT・科学がminのとき
-    element3.textContent = "おすすめ→IT";
-    document.getElementById("osbutton").onclick = function() {
-    window.location.href = 'https://news.yahoo.co.jp/categories/it';
-  }};
-// console.log("ボタンおしたね！")
-
-
-console.log(minindex);
-console.log(max);
-console.log(min);
-console.log(min / max);
-
-
-if((min / max <= 0.3)){
-  console.log("偏ってる！")
-  // document.body.style.backgroundColor = "#ccffcc";
-  var obj = document.getElementById("wrapper");
-  obj.style.color = '#ffffff';            //文字色を白にする
-  obj.style.backgroundColor = '#ff0000';  //背景色を赤にする
-  var obj2 = document.getElementById("contents");
-  obj2.style.color = '#ffffff';            //文字色を白にする
-  obj2.style.backgroundColor = '#ff0000';  //背景色を赤にする
-
-
-  //
-}else if(min / max <= 0.5){
-  console.log("微妙です")
-}else if(min / max <= 0.7){
-  console.log("あんまり偏ってない")
-}
 　
-});
+// });
 
 
 
