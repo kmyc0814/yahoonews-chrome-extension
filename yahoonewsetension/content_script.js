@@ -3,7 +3,10 @@ const categoryLabels = ["国内・地域・ライフ", "国際", "経済", "エ�
 document.querySelectorAll(".msthdtxt").forEach(e => e.parentNode.removeChild(e)); //消す
 document.querySelectorAll(".yjnSubAd").forEach(e => e.parentNode.removeChild(e)); //消す
 let oscategory = document.querySelectorAll(".yjnHeader_sub_cat a");
-
+let color1 = '#4d4dff';
+let color2 = '#ffffff';
+let color3 = '#e60000';
+let color4 = '#ffb3b3';
   let newscategory = document.querySelectorAll("#gnSec li");//（主要=0）国内=1　国際=2　経済=3　エンタメ=4　スポーツ=5　ＩＴ=6　科学=7　ライフ=8　地域=9
   let current = document.querySelector("#gnSec .current");
   newscategory = [].slice.call(newscategory);// HTMLCollectionから配列を作成
@@ -42,13 +45,13 @@ chrome.storage.local.get(['balance'], function (value) {
       //おすすめボタン
       let element3 =document.createElement("button");
       element3.id = "osbutton";
-      element3.style.backgroundColor = "blue";
-      element3.style.color = "white";
+      element3.style.backgroundColor = color1;
+      element3.style.color = color2;
       target.appendChild(element3);
 
         if(minindex == 0){//国内・地域・ライフがminのとき
-          oscategory[1].style.backgroundColor = 'blue';
-          oscategory[1].style.color = '#ffffff';
+          oscategory[1].style.backgroundColor = color1;
+          oscategory[1].style.color = color2;
           element3.textContent = "おすすめ→国内";
           document.getElementById("osbutton").onclick = function() {
         window.location.href = 'https://news.yahoo.co.jp/categories/domestic';
@@ -56,29 +59,29 @@ chrome.storage.local.get(['balance'], function (value) {
           // window.open('パス名', '_blank'); // 新しいタブを開き、ページを表示
         }};
         if(minindex == 1){//国際がminのとき
-          oscategory[1].style.backgroundColor = 'blue';
-          oscategory[1].style.color = '#ffffff';
+          oscategory[1].style.backgroundColor = color1;
+          oscategory[1].style.color = color2;
           element3.textContent = "おすすめ→国際";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/world';
         }};
         if(minindex == 2){//経済がminのとき
-          oscategory[2].style.backgroundColor = 'blue';
-          oscategory[2].style.color = '#ffffff';
+          oscategory[2].style.backgroundColor = color1;
+          oscategory[2].style.color = color2;
           element3.textContent = "おすすめ→経済";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/business';
         }};
         if(minindex == 3){//スポーツ・エンタメがminのとき
-          oscategory[3].style.backgroundColor = 'blue';
-          oscategory[3].style.color = '#ffffff';
+          oscategory[3].style.backgroundColor = color1;
+          oscategory[3].style.color = color2;
           element3.textContent = "おすすめ→エンタメ";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/entertainment';
         }};
         if(minindex == 4){//IT・科学がminのとき
-          oscategory[4].style.backgroundColor = 'blue';
-          oscategory[4].style.color = '#ffffff';
+          oscategory[4].style.backgroundColor = color1;
+          oscategory[4].style.color = color2;
           element3.textContent = "おすすめ→IT";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/it';
@@ -96,14 +99,17 @@ chrome.storage.local.get(['balance'], function (value) {
         console.log("偏ってる！")
         // document.body.style.backgroundColor = "#ccffcc";
         var obj = document.getElementById("wrapper");
-        obj.style.color = '#ffffff';            //文字色を白にする
-        obj.style.backgroundColor = '#ff0000';  //背景色を赤にする
+        obj.style.color = color2;            //文字色を白にする
+        obj.style.backgroundColor = 'color3';  //背景色を赤にする
         var obj2 = document.getElementById("contents");
-        obj2.style.color = '#ffffff';            //文字色を白にする
-        obj2.style.backgroundColor = '#ff0000';  //背景色を赤にする
+        obj2.style.color = color2;            //文字色を白にする
+        obj2.style.backgroundColor = '#color3';  //背景色を赤にする
+      }else if(min / max <= 0.4){
+        // obj.style.color = '#ffffff';            //文字色を白にする
+        obj.style.backgroundColor = 'color4';  //背景色をうすい赤にする
+        // obj2.style.color = '#ffffff';            //文字色を白にする
+        obj2.style.backgroundColor = 'color4';
 
-
-        //
       }else if(min / max <= 0.5){
         console.log("微妙です")
       }else if(min / max <= 0.7){
