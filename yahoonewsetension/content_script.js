@@ -1,3 +1,5 @@
+const categoryLabels = ["国内・地域・ライフ", "国際", "経済", "エンタメ・スポーツ", "IT・科学"];
+
 document.querySelectorAll(".msthdtxt").forEach(e => e.parentNode.removeChild(e)); //消す
 document.querySelectorAll(".yjnSubAd").forEach(e => e.parentNode.removeChild(e)); //消す
 
@@ -7,113 +9,29 @@ document.querySelectorAll(".yjnSubAd").forEach(e => e.parentNode.removeChild(e))
   let index = newscategory.indexOf(current);// 要素の順番を取得
   console.log(index);
 
-var data1;
-var data2;
-var data3;
-var data4;
-var data5;
+chrome.storage.local.get(['balance'], function (value) {
+  let balance = value.balance || Array(5).fill(0);
 
-chrome.storage.local.get(["key1", "key2", "key3","key4","key5"], function (value) {
-data1 = value.key1;
-data2 = value.key2;
-data3 = value.key3;
-data4 = value.key4;
-data5 = value.key5;
+  if(index == 1 ||index == 8 || index == 9) balance[0] += 1;
+  if(index == 2) balance[1] += 1;
+  if(index == 3) balance[2] += 1;
+  if(index == 4 ||index == 5) balance[3] += 1;
+  if(index == 6 ||index == 7) balance[4] += 1;
 
-//更新する
-if(!value.key1){
-  value.key1 = 0;
-  console.log(value.key1);
-}
+  chrome.storage.local.set({ 'balance': balance });
 
-if(!value.key2){
-  value.key2 = 0;
-}
-if(!value.key3){
-  value.key3 = 0;
-}
-if(!value.key4){
-  value.key4 = 0;
-}
-if(!value.key5){
-  value.key5 = 0;
-}
+  //表示
 
-if(index == 1 ||index == 8 || index == 9){
-  chrome.storage.local.get("key1", function (value) {
-    // data1 = value.key1;
-    if(!value.key1){
-      data1 = 1;
-      console.log(data1);
-    }else{
-      data1 = data1 + 1;
-    }
-    chrome.storage.local.set({'key1': data1}, function () {
-    });
-
-});}
-if(index == 2){
-  chrome.storage.local.get("key2", function (value) {
-    // data2 = value.key2;
-      if(!value.key2){
-      data2 = 1;
-    }else{
-      data2 = data2 + 1;
-    }
-chrome.storage.local.set({'key2': data2}, function () {
-  console.log(data2);
-});
-});}
-if(index == 3){
-  chrome.storage.local.get("key3", function (value) {
-    data3 = value.key3;
-      if(!value.key3){
-      data3 = 1;
-    }else{
-      data3 = data3 + 1;
-    }
-    chrome.storage.local.set({'key3': data3}, function () {
-});
-});}
-if(index == 4 ||index == 5){
-    chrome.storage.local.get("key4", function (value) {
-      data4 = value.key4;
-        if(!value.key4){
-        data4 = 1;
-      }else{
-        data4 = data4 + 1;
-      }
-  chrome.storage.local.set({'key4': data4}, function () {
-  });
-});}
-if(index == 6 ||index == 7){
-      chrome.storage.local.get("key5", function (value) {
-        data5 = value.key5;
-          if(!value.key5){
-          data5 = 1;
-        }else{
-          data5 = data5 + 1;
-        }
-    chrome.storage.local.set({'key5': data5}, function () {
-    });
-      });}
-
-      //表示
-
-       let element1 = document.createElement("div");// <div></div>
-       // element1.className = "newscount"
-       element1.textContent =
-         "国内・地域・ライフ:"+value.key1+"回"
-        +"\n国際:"+value.key2+"回"
-        +"\n経済:"+value.key3+"回"
-        +"\nエンタメ・スポーツ:"+value.key4+"回"
-        +"\nＩＴ・科学:"+value.key5+"回";
-        let target = document.querySelector("#msthd");
-        target.appendChild(element1);
+   let element1 = document.createElement("div");// <div></div>
+   // element1.className = "newscount"
+   element1.textContent = balance.map((count, i) => categoryLabels[i] + ":" + count + "回").join("\n");
+   let target = document.querySelector("#msthd");
+   target.appendChild(element1);
+   console.log(element1.textContent);
 
 
       //背景色の変化
-      var balance = [data1, data2, data3, data4, data5];
+      //var balance = [data1, data2, data3, data4, data5];
       let max = Math.max.apply(null, balance);
       let min = Math.min.apply(null, balance);
 
@@ -183,17 +101,6 @@ if(index == 6 ||index == 7){
 
 });
 
-// chrome.storage.local.get(["key1", "key2", "key3","key4","key5"], function (value) {
-//   data1 = value.key1;
-//   data2 = value.key2;
-//   data3 = value.key3;
-//   data4 = value.key4;
-//   data5 = value.key5;
-
-
-　
-// });
-
 
 
 
@@ -218,12 +125,8 @@ loadFileToElement(element2, url, afterLoad);
 //
  function afterLoad(){
    // console.log("追加後に行う処理をここに書きます");
-   chrome.storage.local.get(["key1", "key2", "key3","key4","key5"], function (value) {
-   data1 = value.key1;
-   data2 = value.key2;
-   data3 = value.key3;
-   data4 = value.key4;
-   data5 = value.key5;
+   chrome.storage.local.get(['balance'], function (result) {
+     let balance = result.balance || Array(5).fill(0);
 
    var ctx = document.getElementById("myChart");
    ctx.style.color = 'black';
@@ -231,7 +134,7 @@ loadFileToElement(element2, url, afterLoad);
    var myChart = new Chart(ctx, {
      type: 'radar',
      data: {
-       labels: ["国内・地域・ライフ", "国際", "経済", "エンタメ・スポーツ", "IT・科学"],
+       labels: categoryLabels,
        datasets: [{
          label: '閲覧回数',
          backgroundColor: "rgba(54, 162, 235,0.4)",
@@ -241,7 +144,7 @@ loadFileToElement(element2, url, afterLoad);
          pointHoverBackgroundColor: "#fff",//結合点の背景色（ホバーしたとき）
          pointHoverBorderColor: "rgba(179,181,198,1)",//結合点の枠線の色（ホバーしたとき）
          hitRadius: 5,//結合点より外でマウスホバーを認識する範囲（ピクセル単位）
-         data: [data1,data2,data3,data4,data5],
+         data: balance,
 
        }]
      },
