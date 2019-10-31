@@ -44,17 +44,12 @@ if(index == 1 ||index == 8 || index == 9){
     // data1 = value.key1;
     if(!value.key1){
       data1 = 1;
-      chrome.storage.local.set({'key1': data1}, function () {
-        console.log(data1);
-      });
       console.log(data1);
     }else{
       data1 = data1 + 1;
-      chrome.storage.local.set({'key1': data1}, function () {
-        console.log(data1);
-      });
-      console.log(data1);
     }
+    chrome.storage.local.set({'key1': data1}, function () {
+    });
 
 });}
 if(index == 2){
