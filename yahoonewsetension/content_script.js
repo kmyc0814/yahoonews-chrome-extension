@@ -2,6 +2,7 @@ const categoryLabels = ["国内・地域・ライフ", "国際", "経済", "エ�
 
 document.querySelectorAll(".msthdtxt").forEach(e => e.parentNode.removeChild(e)); //消す
 document.querySelectorAll(".yjnSubAd").forEach(e => e.parentNode.removeChild(e)); //消す
+let oscategory = document.querySelectorAll(".yjnHeader_sub_cat a");
 
   let newscategory = document.querySelectorAll("#gnSec li");//（主要=0）国内=1　国際=2　経済=3　エンタメ=4　スポーツ=5　ＩＴ=6　科学=7　ライフ=8　地域=9
   let current = document.querySelector("#gnSec .current");
@@ -46,6 +47,8 @@ chrome.storage.local.get(['balance'], function (value) {
       target.appendChild(element3);
 
         if(minindex == 0){//国内・地域・ライフがminのとき
+          oscategory[1].style.backgroundColor = 'blue';
+          oscategory[1].style.color = '#ffffff';
           element3.textContent = "おすすめ→国内";
           document.getElementById("osbutton").onclick = function() {
         window.location.href = 'https://news.yahoo.co.jp/categories/domestic';
@@ -53,21 +56,29 @@ chrome.storage.local.get(['balance'], function (value) {
           // window.open('パス名', '_blank'); // 新しいタブを開き、ページを表示
         }};
         if(minindex == 1){//国際がminのとき
+          oscategory[1].style.backgroundColor = 'blue';
+          oscategory[1].style.color = '#ffffff';
           element3.textContent = "おすすめ→国際";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/world';
         }};
         if(minindex == 2){//経済がminのとき
+          oscategory[2].style.backgroundColor = 'blue';
+          oscategory[2].style.color = '#ffffff';
           element3.textContent = "おすすめ→経済";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/business';
         }};
         if(minindex == 3){//スポーツ・エンタメがminのとき
-          element3.textContent = "おすすめ→スポーツ";
+          oscategory[3].style.backgroundColor = 'blue';
+          oscategory[3].style.color = '#ffffff';
+          element3.textContent = "おすすめ→エンタメ";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/entertainment';
         }};
         if(minindex == 4){//IT・科学がminのとき
+          oscategory[4].style.backgroundColor = 'blue';
+          oscategory[4].style.color = '#ffffff';
           element3.textContent = "おすすめ→IT";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/it';
@@ -181,6 +192,3 @@ loadFileToElement(element2, url, afterLoad);
    xhr.open('GET', url, true);
    xhr.send();
    }
-
-
- // localStorage.clear();
