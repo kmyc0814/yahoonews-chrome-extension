@@ -94,22 +94,24 @@ chrome.storage.local.get(['balance'], function (value) {
       console.log(min);
       console.log(min / max);
 
-
+var obj = document.getElementById("wrapper");
+var obj2 = document.getElementById("contents");
       if((min / max <= 0.3)){
-        console.log("偏ってる！")
-        // document.body.style.backgroundColor = "#ccffcc";
-        var obj = document.getElementById("wrapper");
+        console.log("とても偏ってる！")
         obj.style.color = color2;            //文字色を白にする
         obj.style.backgroundColor = 'color3';  //背景色を赤にする
-        var obj2 = document.getElementById("contents");
         obj2.style.color = color2;            //文字色を白にする
         obj2.style.backgroundColor = '#color3';  //背景色を赤にする
+        obj.style.webkitTransform = "rotate(2deg)";//偏る
+        obj2.style.webkitTransform = "rotate(2deg)";
       }else if(min / max <= 0.4){
-        // obj.style.color = '#ffffff';            //文字色を白にする
+        console.log("偏ってる！")
+        obj.style.color = color2;            //文字色を白にする
         obj.style.backgroundColor = 'color4';  //背景色をうすい赤にする
-        // obj2.style.color = '#ffffff';            //文字色を白にする
+        obj2.style.color = color2;            //文字色を白にする
         obj2.style.backgroundColor = 'color4';
-
+        obj.style.webkitTransform = "rotate(1deg)";//偏る
+        obj2.style.webkitTransform = "rotate(1deg)";
       }else if(min / max <= 0.5){
         console.log("微妙です")
       }else if(min / max <= 0.7){
