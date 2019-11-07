@@ -96,22 +96,21 @@ chrome.storage.local.get(['balance'], function (value) {
 
 var obj = document.getElementById("wrapper");
 var obj2 = document.getElementById("contents");
+var obj3 = document.querySelector('body');
       if((min / max <= 0.3)){
         console.log("とても偏ってる！")
         obj.style.color = color2;            //文字色を白にする
-        obj.style.backgroundColor = 'color3';  //背景色を赤にする
+        obj.style.backgroundColor = color3;  //背景色を赤にする
         obj2.style.color = color2;            //文字色を白にする
-        obj2.style.backgroundColor = '#color3';  //背景色を赤にする
-        obj.style.webkitTransform = "rotate(2deg)";//偏る
-        obj2.style.webkitTransform = "rotate(2deg)";
+        obj2.style.backgroundColor = color3;  //背景色を赤にする
+        obj3.style.webkitTransform = "rotate(1deg)";
       }else if(min / max <= 0.4){
         console.log("偏ってる！")
         obj.style.color = color2;            //文字色を白にする
-        obj.style.backgroundColor = 'color4';  //背景色をうすい赤にする
+        obj.style.backgroundColor = color4;  //背景色をうすい赤にする
         obj2.style.color = color2;            //文字色を白にする
-        obj2.style.backgroundColor = 'color4';
-        obj.style.webkitTransform = "rotate(1deg)";//偏る
-        obj2.style.webkitTransform = "rotate(1deg)";
+        obj2.style.backgroundColor = color4;
+        obj3.style.webkitTransform = "rotate(1deg)";
       }else if(min / max <= 0.5){
         console.log("微妙です")
       }else if(min / max <= 0.7){
@@ -119,6 +118,20 @@ var obj2 = document.getElementById("contents");
       }
 
 });
+//ログをとる
+//現在のurlを取得
+var url = location.href;
+var categorytext = newscategory[index].textContent;
+
+chrome.storage.local.get(['kiroku'], function (val) {
+let saishin = { timestamp: Date.now(), category: categorytext, url: url };
+let kiroku = val.kiroku || [];
+kiroku.push(saishin);
+console.log(kiroku);
+chrome.storage.local.set({'kiroku': kiroku}, function () {
+});
+});
+//ログをとるここまで
 
 
 
@@ -136,8 +149,8 @@ let referenceElement = document.querySelector("#fixedArea");
 console.log("subのほう");
 parentElement.insertBefore(element2, referenceElement);
 }
-const url = chrome.runtime.getURL("index.html");
-loadFileToElement(element2, url, afterLoad);
+const indexurl = chrome.runtime.getURL("index.html");
+loadFileToElement(element2, indexurl, afterLoad);
 
 
 
@@ -189,7 +202,7 @@ loadFileToElement(element2, url, afterLoad);
    });
  });
 }
- function loadFileToElement(element, url, callback){
+ function loadFileToElement(element, indexurl, callback){
    let xhr = new XMLHttpRequest();
    xhr.onreadystatechange = function(){
      if(xhr.readyState == 4 && xhr.status == 200){
@@ -197,6 +210,6 @@ loadFileToElement(element2, url, afterLoad);
        callback();
       }
     }
-   xhr.open('GET', url, true);
+   xhr.open('GET', indexurl, true);
    xhr.send();
    }

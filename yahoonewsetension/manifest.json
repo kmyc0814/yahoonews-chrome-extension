@@ -9,7 +9,11 @@
       "js": ["Chart.bundle.min.js", "content_script.js"]
     }
   ],
-  "web_accessible_resources": ["index.html"],
+  "web_accessible_resources": ["index.html", "options.html"],
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
   "permissions": [
     "storage"
   ]
