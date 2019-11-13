@@ -2,16 +2,32 @@ const categoryLabels = ["国内・地域・ライフ", "国際", "経済", "エ�
 
 document.querySelectorAll(".msthdtxt").forEach(e => e.parentNode.removeChild(e)); //消す
 document.querySelectorAll(".yjnSubAd").forEach(e => e.parentNode.removeChild(e)); //消す
-let oscategory = document.querySelectorAll(".yjnHeader_sub_cat a");
-let color1 = '#4d4dff';
-let color2 = '#ffffff';
-let color3 = '#e60000';
-let color4 = '#ffb3b3';
-  let newscategory = document.querySelectorAll("#gnSec li");//（主要=0）国内=1　国際=2　経済=3　エンタメ=4　スポーツ=5　ＩＴ=6　科学=7　ライフ=8　地域=9
-  let current = document.querySelector("#gnSec .current");
+// let oscategory = document.querySelectorAll(".yjnHeader_sub_cat a") || document.querySelectorAll("#gnSec li a");
+let oscategory
+let newscategory;//（主要=0）国内=1　国際=2　経済=3　エンタメ=4　スポーツ=5　ＩＴ=6　科学=7　ライフ=8　地域=9
+let current;
+
+if(document.querySelectorAll(".yjnHeader_sub_cat a").length > 0){
+  oscategory = document.querySelectorAll(".yjnHeader_sub_cat a")
+  newscategory = document.querySelectorAll(".yjnHeader_sub_cat li");
+  current = document.querySelector(".yjnHeader_sub_cat .current");
+  console.log(".yjnHeader_sub_cat .current");
+}else{
+  oscategory = document.querySelectorAll("#gnSec li a")
+  newscategory = document.querySelectorAll("#gnSec li");
+  current = document.querySelector("#gnSec .current");
+  console.log("#gnSec .current");
+  }
   newscategory = [].slice.call(newscategory);// HTMLCollectionから配列を作成
   let index = newscategory.indexOf(current);// 要素の順番を取得
   console.log(index);
+
+let bgcolor1 = '#4d4dff';//おすすめボタンの色：青
+let color1 = '#ffffff';//白
+let bgcolor2 = '#e60000';//とても偏ってるときの色：赤
+let color2 = '#f2f2f2';//白に近いグレー
+let bgcolor3 = '#ffb3b3';//偏ってる時の色：薄赤
+let color3 = '#ffe6ff';//薄赤
 
 chrome.storage.local.get(['balance'], function (value) {
   let balance = value.balance || Array(5).fill(0);
@@ -45,13 +61,13 @@ chrome.storage.local.get(['balance'], function (value) {
       //おすすめボタン
       let element3 =document.createElement("button");
       element3.id = "osbutton";
-      element3.style.backgroundColor = color1;
-      element3.style.color = color2;
+      element3.style.backgroundColor = bgcolor1;
+      element3.style.color = color1;
       target.appendChild(element3);
 
         if(minindex == 0){//国内・地域・ライフがminのとき
-          oscategory[1].style.backgroundColor = color1;
-          oscategory[1].style.color = color2;
+          oscategory[1].style.backgroundColor = bgcolor1;
+          oscategory[1].style.color = color1;
           element3.textContent = "おすすめ→国内";
           document.getElementById("osbutton").onclick = function() {
         window.location.href = 'https://news.yahoo.co.jp/categories/domestic';
@@ -59,29 +75,29 @@ chrome.storage.local.get(['balance'], function (value) {
           // window.open('パス名', '_blank'); // 新しいタブを開き、ページを表示
         }};
         if(minindex == 1){//国際がminのとき
-          oscategory[1].style.backgroundColor = color1;
-          oscategory[1].style.color = color2;
+          oscategory[1].style.backgroundColor = bgcolor1;
+          oscategory[1].style.color = color1;
           element3.textContent = "おすすめ→国際";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/world';
         }};
         if(minindex == 2){//経済がminのとき
-          oscategory[2].style.backgroundColor = color1;
-          oscategory[2].style.color = color2;
+          oscategory[2].style.backgroundColor = bgcolor1;
+          oscategory[2].style.color = color1;
           element3.textContent = "おすすめ→経済";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/business';
         }};
         if(minindex == 3){//スポーツ・エンタメがminのとき
-          oscategory[3].style.backgroundColor = color1;
-          oscategory[3].style.color = color2;
+          oscategory[3].style.backgroundColor = bgcolor1;
+          oscategory[3].style.color = color1;
           element3.textContent = "おすすめ→エンタメ";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/entertainment';
         }};
         if(minindex == 4){//IT・科学がminのとき
-          oscategory[4].style.backgroundColor = color1;
-          oscategory[4].style.color = color2;
+          oscategory[4].style.backgroundColor = bgcolor1;
+          oscategory[4].style.color = color1;
           element3.textContent = "おすすめ→IT";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/it';
@@ -100,16 +116,16 @@ var obj3 = document.querySelector('body');
       if((min / max <= 0.3)){
         console.log("とても偏ってる！")
         obj.style.color = color2;            //文字色を白にする
-        obj.style.backgroundColor = color3;  //背景色を赤にする
+        obj.style.backgroundColor = bgcolor2;  //背景色を赤にする
         obj2.style.color = color2;            //文字色を白にする
-        obj2.style.backgroundColor = color3;  //背景色を赤にする
-        obj3.style.webkitTransform = "rotate(1deg)";
+        obj2.style.backgroundColor = bgcolor2;  //背景色を赤にする
+        obj3.style.webkitTransform = "rotate(1.5deg)";
       }else if(min / max <= 0.4){
         console.log("偏ってる！")
-        obj.style.color = color2;            //文字色を白にする
-        obj.style.backgroundColor = color4;  //背景色をうすい赤にする
-        obj2.style.color = color2;            //文字色を白にする
-        obj2.style.backgroundColor = color4;
+        obj.style.color = color3;            //文字色を白にする
+        obj.style.backgroundColor = bgcolor3;  //背景色をうすい赤にする
+        obj2.style.color = color3;            //文字色を白にする
+        obj2.style.backgroundColor = bgcolor3;
         obj3.style.webkitTransform = "rotate(1deg)";
       }else if(min / max <= 0.5){
         console.log("微妙です")
@@ -120,16 +136,18 @@ var obj3 = document.querySelector('body');
 });
 //ログをとる
 //現在のurlを取得
-var url = location.href;
-var categorytext = newscategory[index].textContent;
+let url = location.href;
+let categorytext = newscategory[index].textContent;
 
 chrome.storage.local.get(['kiroku'], function (val) {
 let saishin = { timestamp: Date.now(), category: categorytext, url: url };
 let kiroku = val.kiroku || [];
-kiroku.push(saishin);
-console.log(kiroku);
-chrome.storage.local.set({'kiroku': kiroku}, function () {
-});
+// if(kiroku['url'] != saishin['url']){//kirokuの中に同じurlがなければ
+  kiroku.push(saishin);
+  console.log(kiroku);
+  chrome.storage.local.set({'kiroku': kiroku}, function () {
+  });
+// };
 });
 //ログをとるここまで
 
