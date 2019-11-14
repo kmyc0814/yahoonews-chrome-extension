@@ -2,7 +2,7 @@ const categoryLabels = ["国内・地域・ライフ", "国際", "経済", "エ�
 
 document.querySelectorAll(".msthdtxt").forEach(e => e.parentNode.removeChild(e)); //消す
 document.querySelectorAll(".yjnSubAd").forEach(e => e.parentNode.removeChild(e)); //消す
-// let oscategory = document.querySelectorAll(".yjnHeader_sub_cat a") || document.querySelectorAll("#gnSec li a");
+// let oscategory = document.querySelectorAll(".yjnHeader_sub_cat a") || document.querySelectorAll("#gnSec li a");←できない
 let oscategory
 let newscategory;//（主要=0）国内=1　国際=2　経済=3　エンタメ=4　スポーツ=5　ＩＴ=6　科学=7　ライフ=8　地域=9
 let current;
@@ -29,7 +29,8 @@ let color2 = '#f2f2f2';//白に近いグレー
 let bgcolor3 = '#ffb3b3';//偏ってる時の色：薄赤
 let color3 = '#ffe6ff';//薄赤
 
-chrome.storage.local.get(['balance'], function (value) {
+chrome.storage.local.get(['balance'], function (value) {//グラフ用の記録
+
   let balance = value.balance || Array(5).fill(0);
 
   if(index == 1 ||index == 8 || index == 9) balance[0] += 1;
@@ -38,7 +39,8 @@ chrome.storage.local.get(['balance'], function (value) {
   if(index == 4 ||index == 5) balance[3] += 1;
   if(index == 6 ||index == 7) balance[4] += 1;
 
-  chrome.storage.local.set({ 'balance': balance });
+
+chrome.storage.local.set({ 'balance': balance });
 
   //表示
 
@@ -133,23 +135,34 @@ var obj3 = document.querySelector('body');
         console.log("あんまり偏ってない")
       }
 
-});
+});//グラフ用の記録ここまで
 //ログをとる
 //現在のurlを取得
 let url = location.href;
 let categorytext = newscategory[index].textContent;
-
+if(document.querySelectorAll("#gnSec li").length > 0){
 chrome.storage.local.get(['kiroku'], function (val) {
 let saishin = { timestamp: Date.now(), category: categorytext, url: url };
 let kiroku = val.kiroku || [];
-// if(kiroku['url'] != saishin['url']){//kirokuの中に同じurlがなければ
-  kiroku.push(saishin);
-  console.log(kiroku);
-  chrome.storage.local.set({'kiroku': kiroku}, function () {
-  });
-// };
+let urlog = kiroku.map(function(o){ return o.url });//urlのみの配列
+//console.log(saishin.url);
+let found = urlog.find(function(elem) {
+  return elem === saishin.url;
 });
+    if(!found){
+    kiroku.push(saishin);
+    chrome.storage.local.set({'kiroku': kiroku}, function () {
+      console.log("新しく保存");
+    });
+  }else{
+    console.log("前にも見た");
+  }
+console.log(kiroku);
+  });
+};
 //ログをとるここまで
+
+
 
 
 
