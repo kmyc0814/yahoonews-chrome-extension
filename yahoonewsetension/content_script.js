@@ -137,8 +137,7 @@ var obj3 = document.querySelector('body');
 
 });//グラフ用の記録ここまで
 //ログをとる
-//現在のurlを取得
-let url = location.href;
+let url = location.href;//現在のurlを取得
 let categorytext = newscategory[index].textContent;
 if(document.querySelectorAll("#gnSec li").length > 0){
 chrome.storage.local.get(['kiroku'], function (val) {
