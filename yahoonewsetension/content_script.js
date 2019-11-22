@@ -8,14 +8,15 @@ let newscategory;//（主要=0）国内=1　国際=2　経済=3　エンタメ=4
 let current;
 let index;
 let balance;
+let currentpage;
 // let target;
 let target = document.querySelector("#msthd");
 let bgcolor1 = '#4d4dff';//おすすめボタンの色：青
 let color1 = '#ffffff';//白
 let bgcolor2 = '#e60000';//とても偏ってるときの色：赤
-let color2 = '#f2f2f2';//白に近いグレー
+let color2 = '#808080';//グレー
 let bgcolor3 = '#ffb3b3';//偏ってる時の色：薄赤
-let color3 = '#ffe6ff';//薄赤
+let color3 = '#ff80b3';//薄赤
 
 hensuu();
 // keeplog();
@@ -29,7 +30,7 @@ function hensuu(){
     newscategory = document.querySelectorAll(".yjnHeader_sub_cat li");
     current = document.querySelector(".yjnHeader_sub_cat .current");
     console.log(".yjnHeader_sub_cat .current");
-    index = 9;//記事以外のページではグラフが更新されない
+    index = 0;//記事以外のページではグラフが更新されない
   }else{
     oscategory = document.querySelectorAll("#gnSec li a")
     newscategory = document.querySelectorAll("#gnSec li");
@@ -101,11 +102,13 @@ function countlist(){//表示
       let max = Math.max.apply(null, balance);
       let min = Math.min.apply(null, balance);
 
+      let maxindex = balance.indexOf(max);
+      console.log(maxindex);
       let minindex = balance.indexOf(min);// 閲覧回数が最小のカテゴリー:0~4
-      // let maxindex = balance.indexOf(max);
 
 
 function osbutton(){//おすすめボタン
+      console.log(minindex);//0,1,2,3,4
       let element3 =document.createElement("button");
       element3.id = "osbutton";
       element3.style.backgroundColor = bgcolor1;
@@ -113,9 +116,13 @@ function osbutton(){//おすすめボタン
       target = document.querySelector("#msthd");//
       target.appendChild(element3);
 
-        if(minindex == 0){//国内・地域・ライフがminのとき
+        if(minindex ==0){//国内・地域・ライフがminのとき
           oscategory[1].style.backgroundColor = bgcolor1;
           oscategory[1].style.color = color1;
+          oscategory[8].style.backgroundColor = bgcolor1;
+          oscategory[8].style.color = color1;
+          oscategory[9].style.backgroundColor = bgcolor1;
+          oscategory[9].style.color = color1;
           element3.textContent = "おすすめ→国内";
           document.getElementById("osbutton").onclick = function() {
         window.location.href = 'https://news.yahoo.co.jp/categories/domestic';
@@ -123,29 +130,33 @@ function osbutton(){//おすすめボタン
           // window.open('パス名', '_blank'); // 新しいタブを開き、ページを表示
         }};
         if(minindex == 1){//国際がminのとき
-          oscategory[1].style.backgroundColor = bgcolor1;
-          oscategory[1].style.color = color1;
+          oscategory[2].style.backgroundColor = bgcolor1;
+          oscategory[2].style.color = color1;
           element3.textContent = "おすすめ→国際";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/world';
         }};
         if(minindex == 2){//経済がminのとき
-          oscategory[2].style.backgroundColor = bgcolor1;
-          oscategory[2].style.color = color1;
+          oscategory[3].style.backgroundColor = bgcolor1;
+          oscategory[3].style.color = color1;
           element3.textContent = "おすすめ→経済";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/business';
         }};
         if(minindex == 3){//スポーツ・エンタメがminのとき
-          oscategory[3].style.backgroundColor = bgcolor1;
-          oscategory[3].style.color = color1;
+          oscategory[4].style.backgroundColor = bgcolor1;
+          oscategory[4].style.color = color1;
+          oscategory[5].style.backgroundColor = bgcolor1;
+          oscategory[5].style.color = color1;
           element3.textContent = "おすすめ→エンタメ";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/entertainment';
         }};
         if(minindex == 4){//IT・科学がminのとき
-          oscategory[4].style.backgroundColor = bgcolor1;
-          oscategory[4].style.color = color1;
+          oscategory[6].style.backgroundColor = bgcolor1;
+          oscategory[6].style.color = color1;
+          oscategory[7].style.backgroundColor = bgcolor1;
+          oscategory[7].style.color = color1;
           element3.textContent = "おすすめ→IT";
           document.getElementById("osbutton").onclick = function() {
           window.location.href = 'https://news.yahoo.co.jp/categories/it';
@@ -158,19 +169,27 @@ function changescreen(){//画面変化
       console.log(max);
       console.log(min);
       console.log(min / max);
+      console.log(index);
+
+  if(index == 1 ||index == 8 || index == 9) currentpage = 0;
+  if(index == 2) currentpage = 1;
+  if(index == 3) currentpage = 2;
+  if(index == 4 ||index == 5) currentpage = 3;
+  if(index == 6 ||index == 7) currentpage = 4;
+  if(index == 0) currentpage = 5;
 
       var obj = document.getElementById("wrapper");
       var obj2 = document.getElementById("contents");
       var obj3 = document.querySelector('body');
 
-      if((min / max <= 0.3)){
+      if((min / max <= 0.3) && (currentpage == maxindex || currentpage == 5)){
         console.log("とても偏ってる！")
         obj.style.color = color2;            //文字色を白にする
         obj.style.backgroundColor = bgcolor2;  //背景色を赤にする
         obj2.style.color = color2;            //文字色を白にする
         obj2.style.backgroundColor = bgcolor2;  //背景色を赤にする
         obj3.style.webkitTransform = "rotate(1.5deg)";
-      }else if(min / max <= 0.4){
+      }else if((min / max <= 0.4) && (currentpage == maxindex || currentpage == 5)){
         console.log("偏ってる！")
         obj.style.color = color3;            //文字色を白にする
         obj.style.backgroundColor = bgcolor3;  //背景色をうすい赤にする
@@ -182,7 +201,7 @@ function changescreen(){//画面変化
       }else if(min / max <= 0.7){
         console.log("あんまり偏ってない")
       }
-    }
+    }//画面変化
 
     // countlist();
     osbutton();
