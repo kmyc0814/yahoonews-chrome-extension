@@ -1,0 +1,14 @@
+.recommended{
+  color: #4d4dff;
+  background-color: #ffffff;
+}
+
+.very-unbalanced{
+  color: #808080;
+  background-color: #e60000;
+}
+
+.unbalanced{
+  color: #ff80b3;
+  background-color: #ffb3b3;
+}
