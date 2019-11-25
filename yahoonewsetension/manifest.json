@@ -15,7 +15,8 @@
     "chrome_style": true
   },
   "permissions": [
-    "storage"
+    "storage",
+    "downloads"
   ]
 
 }
