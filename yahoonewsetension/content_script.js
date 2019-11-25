@@ -11,6 +11,9 @@ const recommends = [
 document.querySelectorAll(".msthdtxt").forEach(e => e.parentNode.removeChild(e)); //消す
 document.querySelectorAll(".yjnSubAd").forEach(e => e.parentNode.removeChild(e)); //消す
 
+let decodedData = window.atob('W29iamVjdCBPYmplY3Rd');
+console.log(decodedData);
+
 let oscategory
 let newscategory;//（主要=0）国内=1　国際=2　経済=3　エンタメ=4　スポーツ=5　ＩＴ=6　科学=7　ライフ=8　地域=9
 let index;
@@ -18,7 +21,7 @@ let balance;
 const target = document.querySelector("#msthd");
 
 hensuu();
-chrome.storage.local.get(['balance', 'kiroku'], update);
+chrome.storage.sync.get(['balance', 'kiroku'], update);
 
 function hensuu(){
   if(document.querySelectorAll(".yjnHeader_sub_cat a").length > 0){
@@ -50,13 +53,13 @@ function update(value) {
     if(!found){
       let saishin = { timestamp: Date.now(), category: categorytext, url: url };
       kiroku.push(saishin);
-      chrome.storage.local.set({'kiroku': kiroku}, function () { console.log("新しく保存"); });
+      chrome.storage.sync.set({'kiroku': kiroku}, function () { console.log("新しく保存"); });
       if(index == 1 ||index == 8 || index == 9) balance[0] += 1;
       if(index == 2) balance[1] += 1;
       if(index == 3) balance[2] += 1;
       if(index == 4 ||index == 5) balance[3] += 1;
       if(index == 6 ||index == 7) balance[4] += 1;
-      chrome.storage.local.set({ 'balance': balance });
+      chrome.storage.sync.set({ 'balance': balance });
     }else{
       console.log("前にも見た");
     }
