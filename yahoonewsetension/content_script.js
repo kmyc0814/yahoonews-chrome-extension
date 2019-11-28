@@ -11,9 +11,6 @@ const recommends = [
 document.querySelectorAll(".msthdtxt").forEach(e => e.parentNode.removeChild(e)); //消す
 document.querySelectorAll(".yjnSubAd").forEach(e => e.parentNode.removeChild(e)); //消す
 
-let decodedData = window.atob('W29iamVjdCBPYmplY3Rd');
-console.log(decodedData);
-
 let oscategory
 let newscategory;//（主要=0）国内=1　国際=2　経済=3　エンタメ=4　スポーツ=5　ＩＴ=6　科学=7　ライフ=8　地域=9
 let index;
@@ -140,21 +137,24 @@ function changescreen(rate){ //画面変化
 function chartposition(){
   let element2 = document.createElement("div");//<div></div>
   element2.className = "chart";
+  let element3 = document.createElement("div");
+
   if(document.querySelector("#yjnSub")){//#yjnSubの配列があれば
     let parentElement = document.querySelector("#yjnSub");
     let referenceElement = document.querySelector("#yjnFixableArea");
     console.log("yjnSubのほう");
     parentElement.insertBefore(element2, referenceElement);
+
   }else{
     let parentElement = document.querySelector("#sub");
     let referenceElement = document.querySelector("#fixedArea");
     console.log("subのほう");
     parentElement.insertBefore(element2, referenceElement);
+
   }
   const indexurl = chrome.runtime.getURL("index.html");
-  loadFileToElement(element2, indexurl, afterLoad);
+  loadFileToElement(element2, indexurl, afterLoad, setup);//
 }
-
 
 
 //
@@ -199,6 +199,67 @@ function afterLoad(){
     }
   });
 }
+
+function setup(){
+  const canvas = createCanvas(150,150);
+  canvas.parent('flower');
+  noLoop()
+  background(255);
+  strokeWeight(2);
+  fill(255,212,128);//顔
+  ellipse(75, 75, 70);
+  fill(0);//目
+  rect(60, 60, 5, 12, 20);
+  rect(85, 60, 5, 12, 20);
+  //口
+
+if(balance[0] > 0 && balance[1] > 0 && balance[2] > 0 && balance[3] > 0 && balance[4] > 0){
+  fill(255, 179, 179);//口:笑顔
+  arc(75, 79, 40, 42, 0, PI,CHORD);//口:笑顔
+}else if(balance[0] + balance[1] + balance[2] + balance[3] + balance[4] < 5){
+  noFill();//口:不満
+  arc(75, 90, 15, 10, 85, 50, QUARTER_PI);//口:不満
+}else{
+    line(65, 90, 85, 90);//口:普通
+}
+  //花びら
+    fill(204, 0, 102);
+    strokeWeight(1);// arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+
+    for(let i = 0; i < balance[0]; i++){//国内
+    translate( 150/2, 150/2 );
+    rotate( i / 180 * Math.PI);
+    translate( -150/2, -150/2 );
+    arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+    }
+    for(let i = 0; i < balance[1]; i++){//国際
+    translate( 150/2, 150/2 );
+    rotate((i + 72)/ 180 * Math.PI);
+    translate( -150/2, -150/2 );
+    arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+    }
+    for(let i = 0; i < balance[2]; i++){//経済
+    translate( 150/2, 150/2 );
+    rotate((i + 144)/ 180 * Math.PI);
+    translate( -150/2, -150/2 );
+    arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+    }
+    for(let i = 0; i < balance[3]; i++){//エンタメ・スポーツ
+    translate( 150/2, 150/2 );
+    rotate((i + 216)/ 180 * Math.PI);
+    translate( -150/2, -150/2 );
+    arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+    }
+    for(let i = 0; i < balance[4]; i++){//it科学
+    translate( 150/2, 150/2 );
+    rotate((i + 288)/ 180 * Math.PI);
+    translate( -150/2, -150/2 );
+    arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+    }  // put drawing code here
+    console.log(balance);//ex)1,0,0,0,0
+}
+
+
 
 function loadFileToElement(element, indexurl, callback){
   let xhr = new XMLHttpRequest();
