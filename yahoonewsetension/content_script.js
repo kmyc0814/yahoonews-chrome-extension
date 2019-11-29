@@ -17,6 +17,7 @@ let index;
 let balance;
 const target = document.querySelector("#msthd");
 
+
 hensuu();
 chrome.storage.sync.get(['balance', 'kiroku'], update);
 
@@ -38,6 +39,42 @@ function hensuu(){
   }
 }
 
+// function switchmodebutton(){//機能切り替えボタン
+//   let e = document.createElement("button");
+//   e.id = "switchmode";
+//   e.classList.add("switchmode");
+//   let tg = document.querySelector("#msthdtp");
+//   tg.appendChild(e);
+// chrome.storage.sync.get('mode', function(value){
+//   let mode = value.mode;
+//     if(!value.mode){
+//       value.mode =0;
+//       e.textContent = "指示があるまで押さない";
+//     }else if(value.mode = 1){
+//       e.textContent = "機能が追加されました";
+//       switchmode();
+//     }
+//     e.onclick = function(){
+//       value.mode == 0? value.mode = 1: value.mode = 0;
+//       switchmode();
+//     }
+//     chrome.storage.sync.set({'mode': mode}, function () {console.log(value.mode);});
+//   function switchmode(){
+//        if (value.mode = 1){
+//          console.log("機能追加");
+//        }
+//        else if(value.mode = 0){
+//          console.log("オリジナル");
+//        }
+//    }
+//  });
+// }
+
+
+
+
+
+
 function update(value) {
   balance = value.balance || Array(5).fill(0);
   let kiroku = value.kiroku || [];
@@ -51,14 +88,14 @@ function update(value) {
       let saishin = { timestamp: Date.now(), category: categorytext, url: url };
       kiroku.push(saishin);
       chrome.storage.sync.set({'kiroku': kiroku}, function () { console.log("新しく保存"); });
-      if(index == 1 ||index == 8 || index == 9) balance[0] += 1;
+      if(index == 1 || index == 8 || index == 9) balance[0] += 1;
       if(index == 2) balance[1] += 1;
       if(index == 3) balance[2] += 1;
-      if(index == 4 ||index == 5) balance[3] += 1;
-      if(index == 6 ||index == 7) balance[4] += 1;
+      if(index == 4 || index == 5) balance[3] += 1;
+      if(index == 6 || index == 7) balance[4] += 1;
       chrome.storage.sync.set({ 'balance': balance });
     }else{
-      console.log("前にも見た");
+      console.log("前に見たページ");
     }
   }
 
@@ -69,6 +106,7 @@ function update(value) {
   let maxindex = balance.indexOf(max);
   let minindex = balance.indexOf(min);// 閲覧回数が最小のカテゴリー:0~4
 
+  // switchmodebutton();
   countlist(balance);
   osbutton(minindex);
   chartposition();
@@ -79,7 +117,7 @@ function countlist(balance){// カテゴリごとの閲覧回数のリスト表�
    let e = document.createElement("div");// <div></div>
    e.textContent = balance.map((count, i) => categoryLabels[i] + ":" + count + "回").join("\n");
    console.log(e.textContent);
-   target.appendChild(e);
+   // target.appendChild(e);
 }
 
 function osbutton(minindex){//おすすめボタン
@@ -121,16 +159,18 @@ function changescreen(rate){ //画面変化
     console.log("とても偏ってる！")
     obj.classList.add("very-unbalanced");
     obj2.classList.add("very-unbalanced");
+    obj3.classList.add("very-unbalanced");
     obj3.style.webkitTransform = "rotate(1.5deg)";
   }else if(rate <= 0.4){
     console.log("偏ってる！")
     obj.classList.add("unbalanced");
     obj2.classList.add("unbalanced");
+    obj3.classList.add("unbalanced");
     obj3.style.webkitTransform = "rotate(1deg)";
   }else if(rate <= 0.5){
-    console.log("微妙です")
+    console.log("普通")
   }else if(rate <= 0.7){
-    console.log("あんまり偏ってない")
+    console.log("良いバランス！")
   }
 }
 
@@ -142,13 +182,13 @@ function chartposition(){
   if(document.querySelector("#yjnSub")){//#yjnSubの配列があれば
     let parentElement = document.querySelector("#yjnSub");
     let referenceElement = document.querySelector("#yjnFixableArea");
-    console.log("yjnSubのほう");
+    console.log("yjnSub");
     parentElement.insertBefore(element2, referenceElement);
 
   }else{
     let parentElement = document.querySelector("#sub");
     let referenceElement = document.querySelector("#fixedArea");
-    console.log("subのほう");
+    console.log("sub");
     parentElement.insertBefore(element2, referenceElement);
 
   }
@@ -223,40 +263,73 @@ if(balance[0] > 0 && balance[1] > 0 && balance[2] > 0 && balance[3] > 0 && balan
     line(65, 90, 85, 90);//口:普通
 }
   //花びら
-    fill(204, 0, 102);
-    strokeWeight(1);// arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
 
-    for(let i = 0; i < balance[0]; i++){//国内
+    // (Math.PI*2 / 360 * 0);
+    // fill(204, 0, 102);
+    strokeWeight(1);// arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+    // arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+    let angle = Math.PI*2 / 360 * 0;
+    let k;
+    for(let i = 0; i < Number(balance[0])+1; i++){//国内
+    if(i == 0){rotate(angle)};
+    fill(204, 0, 102);
     translate( 150/2, 150/2 );
-    rotate( i / 180 * Math.PI);
+    rotate( Math.PI*2 / 360 * i);
     translate( -150/2, -150/2 );
     arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
     }
-    for(let i = 0; i < balance[1]; i++){//国際
+    for(let i = 0; i < Number(balance[1])+1; i++){//国際
+    if(i == 0){rotate(angle);
+      k = 72;
+    }else{
+      k = 0;
+    }
+    fill(204, 0, 102);
     translate( 150/2, 150/2 );
-    rotate((i + 72)/ 180 * Math.PI);
+    rotate( Math.PI*2 / 360 * (i+k));
     translate( -150/2, -150/2 );
     arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
     }
-    for(let i = 0; i < balance[2]; i++){//経済
+    for(let i = 0; i < Number(balance[2])+1; i++){//経済
+      if(i == 0){rotate(angle);
+        k = 72;
+      }else{
+        k = 0;
+      }
+    fill(204, 0, 102);
     translate( 150/2, 150/2 );
-    rotate((i + 144)/ 180 * Math.PI);
+    rotate( Math.PI*2 / 360 * (i+k));
     translate( -150/2, -150/2 );
     arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
     }
-    for(let i = 0; i < balance[3]; i++){//エンタメ・スポーツ
+    for(let i = 0; i < Number(balance[3])+1; i++){//エンタメ・スポーツ
+      if(i == 0){rotate(angle);
+        k = 72;
+      }else{
+        k = 0;
+      }
+    fill(204, 0, 102);
     translate( 150/2, 150/2 );
-    rotate((i + 216)/ 180 * Math.PI);
+    rotate( Math.PI*2 / 360 * (i+k));
     translate( -150/2, -150/2 );
     arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
     }
-    for(let i = 0; i < balance[4]; i++){//it科学
+
+    for(let i = 0; i < Number(balance[4])+1; i++){//it科学
+      if(i == 0){rotate(angle);
+        k = 72;
+      }else{
+        k = 0;
+      }
+    fill(204, 0, 102);
     translate( 150/2, 150/2 );
-    rotate((i + 288)/ 180 * Math.PI);
+    rotate( Math.PI*2 / 360 * (i+k));
     translate( -150/2, -150/2 );
     arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
     }  // put drawing code here
     console.log(balance);//ex)1,0,0,0,0
+    console.log(Number(balance[2])+Number(balance[0]));
+    console.log(balance[2]+balance[0]);
 }
 
 
