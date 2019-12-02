@@ -1,6 +1,6 @@
 # yahoonews-chrome-extension
 Yahoo!ニュースのchrome拡張機能  
-～インストール方法～
+～インストール方法～  
 １，[Google　Chrome](https://www.google.co.jp/chrome/index.html)　をまだインストールしていないPCを使いたい人はインストールする。  
 ２，Github：拡張機能をダウンロードできる[URL](https://github.com/kmyc0814/yahoonews-chrome-extension)　に飛ぶ  
 ３，右上緑色の「Clone or Download」→「Download Zip」→保存する（パソコンがWindowsの人はダウンロードしたファイルをデスクトップに移動させてください）  
