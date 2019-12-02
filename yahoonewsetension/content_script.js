@@ -15,11 +15,12 @@ let oscategory
 let newscategory;//（主要=0）国内=1　国際=2　経済=3　エンタメ=4　スポーツ=5　ＩＴ=6　科学=7　ライフ=8　地域=9
 let index;
 let balance;
+let mode;
 const target = document.querySelector("#msthd");
 
 
 hensuu();
-chrome.storage.sync.get(['balance', 'kiroku'], update);
+chrome.storage.sync.get(['balance', 'kiroku' ,'mode'], update);
 
 function hensuu(){
   if(document.querySelectorAll(".yjnHeader_sub_cat a").length > 0){
@@ -38,49 +39,11 @@ function hensuu(){
     console.log(index);
   }
 }
-// switchmodebutton();
-// function switchmodebutton(){//機能切り替えボタン
-//   let e = document.createElement("button");
-//   e.id = "switchmode";
-//   e.classList.add("switchmode");
-//   let tg = document.querySelector("#msthdtp");
-//   tg.appendChild(e);
-// chrome.storage.sync.get('mode', function(value){
-//   let mode = value.mode;
-//     if(!value.mode){
-//       value.mode =0;
-//       e.textContent = "指示があるまで押さない";
-//     }else if(value.mode = 1){
-//       e.textContent = "機能が追加されました";
-//       switchmode();
-//     }
-//     e.onclick = function(){
-//       value.mode == 0? value.mode = 1: value.mode = 0;
-//       switchmode();
-//     }
-//     chrome.storage.sync.set({'mode': mode}, function () {console.log(value.mode);});
-//   function switchmode(){
-//        if (value.mode = 1){
-//          console.log("機能追加");
-//            e.textContent = "機能が追加されました";
-//
-//        }
-//        else if(value.mode = 0){
-//          console.log("オリジナル");
-//          e.textContent = "指示があるまで押さない";
-//        }
-//    }
-//  });
-// }
-
-
-
-
-
 
 function update(value) {
   balance = value.balance || Array(5).fill(0);
   let kiroku = value.kiroku || [];
+  let mode = value.mode;
   let url = location.href;//現在のurlを取得
   let categorytext = newscategory[index].textContent;//カテゴリーの名前
 
@@ -109,11 +72,46 @@ function update(value) {
   let maxindex = balance.indexOf(max);
   let minindex = balance.indexOf(min);// 閲覧回数が最小のカテゴリー:0~4
 
-  countlist(balance);
-  osbutton(minindex);
-  chartposition();
-  if(max > 0) changescreen(min / max);
-}
+  // countlist(balance);
+  // osbutton(minindex);
+  // chartposition();
+  // if(max > 0) changescreen(min / max);
+
+  switchmodebutton();
+
+  function switchmodebutton(){//機能切り替えボタン
+    let e = document.createElement("button");
+    e.id = "switchmode";
+    e.classList.add("switchmode");
+    let tg = document.querySelector("#msthdtp");
+    tg.appendChild(e);
+
+    e.textContent = mode == 1 ? "機能が追加されました": "指示があるまで押さない";
+    if(mode == 1){switchmode();}
+    e.onclick = function(){//クリック
+      // mode == 1 ? mode = 0: mode = 1; // 普通は下のように書く
+      mode = mode == 1 ? 0 : 1;
+      console.log(mode);
+      switchmode();
+      chrome.storage.sync.set({'mode': mode}, function () {console.log("mode:"+mode);});
+    }//クリック
+
+    function switchmode(){
+         if (mode == 1){
+           console.log("機能追加");
+             e.textContent = "機能が追加されました";
+             countlist(balance);
+             osbutton(minindex);
+             chartposition();
+             if(max > 0) changescreen(min / max);
+         }
+         else if(mode == 0){
+           console.log("オリジナルモード");
+           e.textContent = "指示があるまで押さない";
+         }
+     }
+  }//切り替えボタン
+}//update
 
 function countlist(balance){// カテゴリごとの閲覧回数のリスト表示
    let e = document.createElement("div");// <div></div>
