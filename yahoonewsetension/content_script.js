@@ -38,7 +38,7 @@ function hensuu(){
     console.log(index);
   }
 }
-
+// switchmodebutton();
 // function switchmodebutton(){//機能切り替えボタン
 //   let e = document.createElement("button");
 //   e.id = "switchmode";
@@ -62,9 +62,12 @@ function hensuu(){
 //   function switchmode(){
 //        if (value.mode = 1){
 //          console.log("機能追加");
+//            e.textContent = "機能が追加されました";
+//
 //        }
 //        else if(value.mode = 0){
 //          console.log("オリジナル");
+//          e.textContent = "指示があるまで押さない";
 //        }
 //    }
 //  });
@@ -106,7 +109,6 @@ function update(value) {
   let maxindex = balance.indexOf(max);
   let minindex = balance.indexOf(min);// 閲覧回数が最小のカテゴリー:0~4
 
-  // switchmodebutton();
   countlist(balance);
   osbutton(minindex);
   chartposition();
@@ -263,70 +265,41 @@ if(balance[0] > 0 && balance[1] > 0 && balance[2] > 0 && balance[3] > 0 && balan
     line(65, 90, 85, 90);//口:普通
 }
   //花びら
-
-    // (Math.PI*2 / 360 * 0);
-    // fill(204, 0, 102);
-    strokeWeight(1);// arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
-    // arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
-    let angle = Math.PI*2 / 360 * 0;
-    let k;
-    for(let i = 0; i < Number(balance[0])+1; i++){//国内
-    if(i == 0){rotate(angle)};
-    fill(204, 0, 102);
-    translate( 150/2, 150/2 );
-    rotate( Math.PI*2 / 360 * i);
-    translate( -150/2, -150/2 );
-    arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+  strokeWeight(1);// arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+  // arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+  let angle = Math.PI*2 / 360 * 0;
+  let k;
+  for(let i = 0; i < Number(balance[0])+1; i++){//国内
+    if(i == 0){
+      translate( 150/2, 150/2 );
+      rotate( Math.PI*2 / 360 * i);
+      translate( -150/2, -150/2 );
+    }else{
+      fill(204, 0, 102);
+      translate( 150/2, 150/2 );
+      rotate( Math.PI*2 / 360 * i);
+      translate( -150/2, -150/2 );
+      arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
     }
-    for(let i = 0; i < Number(balance[1])+1; i++){//国際
-    if(i == 0){rotate(angle);
+  }
+  for(let j = 1; j < balance.length; j++){
+  for(let i = 0; i < Number(balance[j])+1; i++){//国際
+    if(i == 0){
       k = 72;
+      translate( 150/2, 150/2 );
+      rotate( Math.PI*2 / 360 * (i+k));
+      translate( -150/2, -150/2 );
     }else{
       k = 0;
-    }
-    fill(204, 0, 102);
-    translate( 150/2, 150/2 );
-    rotate( Math.PI*2 / 360 * (i+k));
-    translate( -150/2, -150/2 );
-    arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
-    }
-    for(let i = 0; i < Number(balance[2])+1; i++){//経済
-      if(i == 0){rotate(angle);
-        k = 72;
-      }else{
-        k = 0;
+      fill(204, 0, 102);
+      translate( 150/2, 150/2 );
+      rotate( Math.PI*2 / 360 * (i+k));
+      translate( -150/2, -150/2 );
+      arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
       }
-    fill(204, 0, 102);
-    translate( 150/2, 150/2 );
-    rotate( Math.PI*2 / 360 * (i+k));
-    translate( -150/2, -150/2 );
-    arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
     }
-    for(let i = 0; i < Number(balance[3])+1; i++){//エンタメ・スポーツ
-      if(i == 0){rotate(angle);
-        k = 72;
-      }else{
-        k = 0;
-      }
-    fill(204, 0, 102);
-    translate( 150/2, 150/2 );
-    rotate( Math.PI*2 / 360 * (i+k));
-    translate( -150/2, -150/2 );
-    arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
-    }
+  }// put drawing code here
 
-    for(let i = 0; i < Number(balance[4])+1; i++){//it科学
-      if(i == 0){rotate(angle);
-        k = 72;
-      }else{
-        k = 0;
-      }
-    fill(204, 0, 102);
-    translate( 150/2, 150/2 );
-    rotate( Math.PI*2 / 360 * (i+k));
-    translate( -150/2, -150/2 );
-    arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
-    }  // put drawing code here
     console.log(balance);//ex)1,0,0,0,0
     console.log(Number(balance[2])+Number(balance[0]));
     console.log(balance[2]+balance[0]);
