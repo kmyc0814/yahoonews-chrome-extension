@@ -55,7 +55,7 @@ function update(value) {
     let urlog = kiroku.map(function(o){ return o.url });//urlのみの配列
     let found = urlog.find(function(elem) { return elem === url; });
     if(!found){
-      let saishin = { timestamp: Date.now(), category: categorytext, url: url };
+      let saishin = { timestamp: Date.now(), category: categorytext, url: url, mode:mode};
       kiroku.push(saishin);
       chrome.storage.sync.set({'kiroku': kiroku}, function () { console.log("新しく保存"); });
       if(index == 1 || index == 8 || index == 9) balance[0] += 1;
