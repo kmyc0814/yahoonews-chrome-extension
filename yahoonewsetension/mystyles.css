@@ -1,6 +1,10 @@
 .recommended{
-  color: #4d4dff;
-  background-color: #ffffff;
+  color: #ffffff;
+  background-color: #4d4dff;
+}
+.oscategory{
+  color: #000000;
+  background-color: #3399ff;
 }
 .switchmode{
   color: #ffffff;

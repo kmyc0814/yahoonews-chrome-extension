@@ -5,7 +5,11 @@ const recommends = [
   { text: "国際", href: 'https://news.yahoo.co.jp/categories/world' }, //国際がminのとき
   { text: "経済", href: 'https://news.yahoo.co.jp/categories/business' }, //経済がminのとき
   { text: "エンタメ", href: 'https://news.yahoo.co.jp/categories/entertainment' }, //スポーツ・エンタメがminのとき
-  { text: "IT", href: 'https://news.yahoo.co.jp/categories/it'} //IT・科学がminのとき
+  { text: "IT", href: 'https://news.yahoo.co.jp/categories/it'}, //IT・科学がminのとき
+  { text: "スポーツ", href: 'https://news.yahoo.co.jp/categories/sports'}, //スポーツ:5
+  { text: "科学", href: 'https://news.yahoo.co.jp/categories/science'}, //科学:6
+  { text: "ライフ", href: 'https://news.yahoo.co.jp/categories/life'}, //ライフ:7
+  { text: "地域", href: 'https://news.yahoo.co.jp/categories/local'} //地域:8
 ];
 
 document.querySelectorAll(".msthdtxt").forEach(e => e.parentNode.removeChild(e)); //消す
@@ -24,13 +28,13 @@ chrome.storage.sync.get(['balance', 'kiroku' ,'mode'], update);
 
 function hensuu(){
   if(document.querySelectorAll(".yjnHeader_sub_cat a").length > 0){
-    oscategory = document.querySelectorAll(".yjnHeader_sub_cat a")
+    oscategory = document.querySelectorAll(".yjnHeader_sub_cat a");
     newscategory = document.querySelectorAll(".yjnHeader_sub_cat li");
     current = document.querySelector(".yjnHeader_sub_cat .current");
     console.log(".yjnHeader_sub_cat .current");
     index = 0;//記事以外のページではグラフが更新されない
   }else{
-    oscategory = document.querySelectorAll("#gnSec li a")
+    oscategory = document.querySelectorAll("#gnSec li a");
     newscategory = document.querySelectorAll("#gnSec li");
     const current = document.querySelector("#gnSec .current");
     console.log("#gnSec .current");
@@ -126,25 +130,54 @@ function osbutton(minindex){//おすすめボタン
   e.textContent = "おすすめ→" + recommends[minindex].text;
   e.onclick = function(){ window.location.href = recommends[minindex].href };
   target.appendChild(e);
+if(minindex == 3){
+  e = document.createElement("button");
+  e.id = "osbutton";
+  e.classList.add("recommended");
+  e.textContent = "おすすめ→" + recommends[5].text;
+  e.onclick = function(){ window.location.href = recommends[5].href };
+  target.appendChild(e);
+}if(minindex == 4){
+  e = document.createElement("button");
+  e.id = "osbutton";
+  e.classList.add("recommended");
+  e.textContent = "おすすめ→" + recommends[6].text;
+  e.onclick = function(){ window.location.href = recommends[6].href };
+  target.appendChild(e);
+}if(minindex == 0){
+  e = document.createElement("button");
+  e.id = "osbutton";
+  e.classList.add("recommended");
+  e.textContent = "おすすめ→" + recommends[7].text;
+  e.onclick = function(){ window.location.href = recommends[7].href };
+  target.appendChild(e);
+  e = document.createElement("button");
+  e.id = "osbutton";
+  e.classList.add("recommended");
+  e.textContent = "おすすめ→" + recommends[8].text;
+  e.onclick = function(){ window.location.href = recommends[8].href };
+  target.appendChild(e);
+}
+
 
   if(minindex == 0){//国内・地域・ライフがminのとき
-    oscategory[1].classList.add("recommended");
-    oscategory[8].classList.add("recommended");
-    oscategory[9].classList.add("recommended");
+    oscategory[1].classList.add("oscategory");
+    oscategory[8].classList.add("oscategory");
+    oscategory[9].classList.add("oscategory");
   }
   if(minindex == 1){//国際がminのとき
-    oscategory[2].classList.add("recommended");
+    oscategory[2].classList.add("oscategory");
   }
   if(minindex == 2){//経済がminのとき
-    oscategory[3].classList.add("recommended");
+    oscategory[3].classList.add("oscategory");
   }
   if(minindex == 3){//スポーツ・エンタメがminのとき
-    oscategory[4].classList.add("recommended");
-    oscategory[5].classList.add("recommended");
+    oscategory[4].classList.add("oscategory");
+    oscategory[5].classList.add("oscategory");
   }
   if(minindex == 4){//IT・科学がminのとき
-    oscategory[6].classList.add("recommended");
-    oscategory[7].classList.add("recommended");
+    oscategory[6].classList.add("oscategory");
+    oscategory[7].classList.add("oscategory");
   }
 }
 
@@ -278,7 +311,7 @@ for(let i = 0; i < balance.length; i++){
     }
   }
     console.log(balance);//ex)1,0,0,0,0
-}//setup// put drawing code here
+}//setup
 
 
 function loadFileToElement(element, indexurl, callback){
