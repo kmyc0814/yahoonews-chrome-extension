@@ -134,27 +134,27 @@ if(minindex == 3){
   e = document.createElement("button");
   e.id = "osbutton";
   e.classList.add("recommended");
-  e.textContent = "おすすめ→" + recommends[5].text;
+  e.textContent = "　おすすめ→" + recommends[5].text+"　";
   e.onclick = function(){ window.location.href = recommends[5].href };
   target.appendChild(e);
 }if(minindex == 4){
   e = document.createElement("button");
   e.id = "osbutton";
   e.classList.add("recommended");
-  e.textContent = "おすすめ→" + recommends[6].text;
+  e.textContent = "　おすすめ→" + recommends[6].text+"　";
   e.onclick = function(){ window.location.href = recommends[6].href };
   target.appendChild(e);
 }if(minindex == 0){
   e = document.createElement("button");
   e.id = "osbutton";
   e.classList.add("recommended");
-  e.textContent = "おすすめ→" + recommends[7].text;
+  e.textContent = "　おすすめ→" + recommends[7].text+"　";
   e.onclick = function(){ window.location.href = recommends[7].href };
   target.appendChild(e);
   e = document.createElement("button");
   e.id = "osbutton";
   e.classList.add("recommended");
-  e.textContent = "おすすめ→" + recommends[8].text;
+  e.textContent = "　おすすめ→" + recommends[8].text+"　";
   e.onclick = function(){ window.location.href = recommends[8].href };
   target.appendChild(e);
 }
