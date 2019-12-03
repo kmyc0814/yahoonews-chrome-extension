@@ -72,9 +72,9 @@ function update(value) {
   let maxindex = balance.indexOf(max);
   let minindex = balance.indexOf(min);// 閲覧回数が最小のカテゴリー:0~4
 
-  // countlist(balance);
-  // osbutton(minindex);
-  // chartposition();
+  countlist(balance);
+  osbutton(minindex);
+  chartposition();
   // if(max > 0) changescreen(min / max);
 
   switchmodebutton();
@@ -100,10 +100,8 @@ function update(value) {
          if (mode == 1){
            console.log("機能追加");
              e.textContent = "機能が追加されました";
-             countlist(balance);
-             osbutton(minindex);
-             chartposition();
-             if(max > 0) changescreen(min / max);
+             //ここに追加したい機能を入れる
+            if(max > 0) changescreen(min / max);
          }
          else if(mode == 0){
            console.log("オリジナルモード");
@@ -252,7 +250,6 @@ function setup(){
   rect(60, 60, 5, 12, 20);
   rect(85, 60, 5, 12, 20);
   //口
-
 if(balance[0] > 0 && balance[1] > 0 && balance[2] > 0 && balance[3] > 0 && balance[4] > 0){
   fill(255, 179, 179);//口:笑顔
   arc(75, 79, 40, 42, 0, PI,CHORD);//口:笑顔
@@ -262,47 +259,26 @@ if(balance[0] > 0 && balance[1] > 0 && balance[2] > 0 && balance[3] > 0 && balan
 }else{
     line(65, 90, 85, 90);//口:普通
 }
-  //花びら
-  strokeWeight(1);// arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+//花びら
+  // fill(204, 0, 102);
+strokeWeight(1);// arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
   // arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
-  let angle = Math.PI*2 / 360 * 0;
-  let k;
-  for(let i = 0; i < Number(balance[0])+1; i++){//国内
-    if(i == 0){
-      translate( 150/2, 150/2 );
-      rotate( Math.PI*2 / 360 * i);
-      translate( -150/2, -150/2 );
-    }else{
-      fill(204, 0, 102);
-      translate( 150/2, 150/2 );
-      rotate( Math.PI*2 / 360 * i);
-      translate( -150/2, -150/2 );
-      arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+for(let i = 0; i < balance.length; i++){
+  for(let j = 0; j < Number(balance[i])+1; j++){
+   fill(204, 0, 102);
+   translate( 150/2, 150/2 );
+   rotate( Math.PI*2 / 360 * (i*72+j));
+   translate( -150/2, -150/2 );
+   if(j > 0){
+   arc(75, 20, 12, 40, 0, TWO_PI, CHORD)
+  }
+   translate( 150/2, 150/2 );
+   rotate( Math.PI*2 / 360 * -(i*72+j));
+   translate( -150/2, -150/2 );
     }
   }
-  for(let j = 1; j < balance.length; j++){
-  for(let i = 0; i < Number(balance[j])+1; i++){//国際
-    if(i == 0){
-      k = 72;
-      translate( 150/2, 150/2 );
-      rotate( Math.PI*2 / 360 * (i+k));
-      translate( -150/2, -150/2 );
-    }else{
-      k = 0;
-      fill(204, 0, 102);
-      translate( 150/2, 150/2 );
-      rotate( Math.PI*2 / 360 * (i+k));
-      translate( -150/2, -150/2 );
-      arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
-      }
-    }
-  }// put drawing code here
-
     console.log(balance);//ex)1,0,0,0,0
-    console.log(Number(balance[2])+Number(balance[0]));
-    console.log(balance[2]+balance[0]);
-}
-
+}//setup// put drawing code here
 
 
 function loadFileToElement(element, indexurl, callback){
