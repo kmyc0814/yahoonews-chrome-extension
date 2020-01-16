@@ -300,13 +300,18 @@ for(let i = 0; i < balance.length; i++){
   for(let j = 0; j < Number(balance[i])+1; j++){
    fill(204, 0, 102);
    translate( 150/2, 150/2 );
-   rotate( Math.PI*2 / 360 * (i*72+j));
+   rotate( Math.PI*2 / 360 * (i*72+(j*3)));
+   // rotate( Math.PI*2 / 360 * (i*72+j));//元ver
+   // let random = Math.floor(Math.random() * ((72*(i+1)+1)-72*i)) + 72*i;//ランダムver
+   // rotate( Math.PI*2 / 360 * random);
    translate( -150/2, -150/2 );
    if(j > 0){
    arc(75, 20, 12, 40, 0, TWO_PI, CHORD)
   }
    translate( 150/2, 150/2 );
-   rotate( Math.PI*2 / 360 * -(i*72+j));
+   rotate( Math.PI*2 / 360 * -(i*72+(j*3)));
+  // rotate( Math.PI*2 / 360 * -(i*72+j));//元ver
+  // rotate( Math.PI*2 / 360 * -random);//ランダムver
    translate( -150/2, -150/2 );
     }
   }
