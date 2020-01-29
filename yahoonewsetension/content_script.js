@@ -21,6 +21,8 @@ let index;
 let balance;
 let mode;
 const target = document.querySelector("#msthd");
+let maxindex;
+let minindex;
 
 
 hensuu();
@@ -73,8 +75,8 @@ function update(value) {
 
   let max = Math.max.apply(null, balance);
   let min = Math.min.apply(null, balance);
-  let maxindex = balance.indexOf(max);
-  let minindex = balance.indexOf(min);// 閲覧回数が最小のカテゴリー:0~4
+  maxindex = balance.indexOf(max);
+  minindex = balance.indexOf(min);// 閲覧回数が最小のカテゴリー:0~4
 
   countlist(balance);
   osbutton(minindex);
@@ -90,7 +92,7 @@ function update(value) {
     let tg = document.querySelector("#msthdtp");
     tg.appendChild(e);
 
-    e.textContent = mode == 1 ? "機能が追加されました": "指示があるまで押さない";
+    e.textContent = mode == 1 ? "機能:ON": "機能:OFF";
     if(mode == 1){switchmode();}
     e.onclick = function(){//クリック
       // mode == 1 ? mode = 0: mode = 1; // 普通は下のように書く
@@ -103,13 +105,13 @@ function update(value) {
     function switchmode(){
          if (mode == 1){
            console.log("機能追加");
-             e.textContent = "機能が追加されました";
+             e.textContent = "機能:ON";//機能が追加されました
              //ここに追加したい機能を入れる
             if(max > 0) changescreen(min / max);
          }
          else if(mode == 0){
            console.log("オリジナルモード");
-           e.textContent = "指示があるまで押さない";
+           e.textContent = "機能:OFF";//指示があるまで押さない
          }
      }
   }//切り替えボタン
@@ -296,9 +298,21 @@ if(balance[0] > 0 && balance[1] > 0 && balance[2] > 0 && balance[3] > 0 && balan
   // fill(204, 0, 102);
 strokeWeight(1);// arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
   // arc(75, 20, 12, 40, 0, TWO_PI, CHORD);
+  //花弁変化
+    let r;
+    let g;
+    let b;
+    r = 102 + 38*maxindex;
+    g = 102 + 38*minindex;
+    if(maxindex = 4){
+    b = 102 + 38*0
+    }else{
+    b = 102 + 38*(maxindex+1);
+  }
+    fill(r, g, b);//色
 for(let i = 0; i < balance.length; i++){
   for(let j = 0; j < Number(balance[i])+1; j++){
-   fill(204, 0, 102);
+   // fill(204, 0, 102);//色
    translate( 150/2, 150/2 );
    rotate( Math.PI*2 / 360 * (i*72+(j*3)));
    // rotate( Math.PI*2 / 360 * (i*72+j));//元ver
