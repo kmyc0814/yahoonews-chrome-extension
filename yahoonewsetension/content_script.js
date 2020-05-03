@@ -23,6 +23,7 @@ let mode;
 const target = document.querySelector("#msthd");
 let maxindex;
 let minindex;
+let late;
 
 
 hensuu();
@@ -52,19 +53,26 @@ function update(value) {
   let mode = value.mode;
   let url = location.href;//現在のurlを取得
   let categorytext = newscategory[index].textContent;//カテゴリーの名前
+  let categorynum;
+  if(index == 1 || index == 8 || index == 9)categorynum = 0;
+  if(index == 2)categorynum = 1;
+  if(index == 3)categorynum = 2;
+  if(index == 4 || index == 5)categorynum = 3;
+  if(index == 6 || index == 7)categorynum = 4;
+
 
   if(document.querySelectorAll("#gnSec li").length > 0){//記事ページなら
     let urlog = kiroku.map(function(o){ return o.url });//urlのみの配列
     let found = urlog.find(function(elem) { return elem === url; });
     if(!found){
-      let saishin = { timestamp: Date.now(), category: categorytext, url: url, mode:mode};
+      let saishin = { timestamp: Date.now(), category: categorytext, number:categorynum,url: url, mode:mode};
       kiroku.push(saishin);
       chrome.storage.sync.set({'kiroku': kiroku}, function () { console.log("新しく保存"); });
-      if(index == 1 || index == 8 || index == 9) balance[0] += 1;
-      if(index == 2) balance[1] += 1;
-      if(index == 3) balance[2] += 1;
-      if(index == 4 || index == 5) balance[3] += 1;
-      if(index == 6 || index == 7) balance[4] += 1;
+      if(categorynum == 0) balance[0] += 1;
+      if(categorynum == 1) balance[1] += 1;
+      if(categorynum == 2) balance[2] += 1;
+      if(categorynum == 3) balance[3] += 1;
+      if(categorynum == 4) balance[4] += 1;
       chrome.storage.sync.set({ 'balance': balance });
     }else{
       console.log("前に見たページ");
@@ -72,6 +80,8 @@ function update(value) {
   }
 
   console.log(kiroku);
+  late = kiroku.slice(-5);
+  let latelog = late.map(function(o){ return o.number });
 
   let max = Math.max.apply(null, balance);
   let min = Math.min.apply(null, balance);
@@ -107,7 +117,7 @@ function update(value) {
            console.log("機能追加");
              e.textContent = "機能:ON";//機能が追加されました
              //ここに追加したい機能を入れる
-            if(max > 0) changescreen(min / max);
+            if(max >= 5 + min) changescreen(min / max);
          }
          else if(mode == 0){
            console.log("オリジナルモード");
@@ -181,31 +191,33 @@ if(minindex == 3){
     oscategory[6].classList.add("oscategory");
     oscategory[7].classList.add("oscategory");
   }
-}
+}//osusume
 
 function changescreen(rate){ //画面変化
+  console.log(rate);
   var obj = document.getElementById("wrapper");
   var obj2 = document.getElementById("contents");
   var obj3 = document.querySelector('body');
-
-  if(rate <= 0.3){
+  if(rate <= 0.16){//0.3
     console.log("とても偏ってる！")
+    if(maxindex == index){
     obj.classList.add("very-unbalanced");
     obj2.classList.add("very-unbalanced");
     obj3.classList.add("very-unbalanced");
     obj3.style.webkitTransform = "rotate(1.5deg)";
-  }else if(rate <= 0.4){
+    }
+  }else if(rate <= 0.2){//0.4
+    if(maxindex == index){
     console.log("偏ってる！")
     obj.classList.add("unbalanced");
     obj2.classList.add("unbalanced");
     obj3.classList.add("unbalanced");
     obj3.style.webkitTransform = "rotate(1deg)";
-  }else if(rate <= 0.5){
-    console.log("普通")
+    }
   }else if(rate <= 0.7){
     console.log("良いバランス！")
-  }
 }
+}//penalty function
 
 function chartposition(){
   let element2 = document.createElement("div");//<div></div>
