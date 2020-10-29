@@ -18,8 +18,12 @@ document.querySelectorAll(".yjnSubAd").forEach(e => e.parentNode.removeChild(e))
 let oscategory
 let newscategory;//（主要=0）国内=1　国際=2　経済=3　エンタメ=4　スポーツ=5　ＩＴ=6　科学=7　ライフ=8　地域=9
 let index;
+let categorynum;
 let balance;
-let mode;
+let mode;//01
+let good;//01
+let srclog;
+let srcMap;
 const target = document.querySelector("#msthd");
 let maxindex;
 let minindex;
@@ -27,20 +31,18 @@ let late;
 
 
 hensuu();
-chrome.storage.sync.get(['balance', 'kiroku' ,'mode'], update);
+chrome.storage.sync.get(['balance', 'kiroku' ,'mode', 'srclog'], update);
 
 function hensuu(){
-  if(document.querySelectorAll(".yjnHeader_sub_cat a").length > 0){
+  if(document.querySelectorAll(".pickupMain").length > 0 || document.querySelectorAll(".topics") >0 ){
+    oscategory = document.querySelectorAll(".yjnHeader_sub_cat a");
+    newscategory = document.querySelectorAll(".yjnHeader_sub_cat li");
+    const current = document.querySelector(".yjnHeader_sub_cat .current");
+    index = 0;//記事以外のページではグラフが更新されない
+  }else{
     oscategory = document.querySelectorAll(".yjnHeader_sub_cat a");
     newscategory = document.querySelectorAll(".yjnHeader_sub_cat li");
     current = document.querySelector(".yjnHeader_sub_cat .current");
-    console.log(".yjnHeader_sub_cat .current");
-    index = 0;//記事以外のページではグラフが更新されない
-  }else{
-    oscategory = document.querySelectorAll("#gnSec li a");
-    newscategory = document.querySelectorAll("#gnSec li");
-    const current = document.querySelector("#gnSec .current");
-    console.log("#gnSec .current");
     newscategory = [].slice.call(newscategory);// HTMLCollectionから配列を作成
     index = newscategory.indexOf(current);// 要素の順番を取得
     console.log(index);
@@ -50,22 +52,38 @@ function hensuu(){
 function update(value) {
   balance = value.balance || Array(5).fill(0);
   let kiroku = value.kiroku || [];
-  let mode = value.mode;
+  mode = value.mode;
+  // srclog = value.srclog || [];
+  if(!srclog){
+    srclog = [];
+    console.log("保存されてない");
+  }else{
+    srclog=value.srclog;
+    console.log("保存されてる");
+  }
+  srcMap = new Map();
+  for(let i =0; i<srclog.length;i++){
+    srcMap.set(i,srclog[i]);
+  }
+  console.log(srclog);
+  console.log(srcMap);
+
   let url = location.href;//現在のurlを取得
   let categorytext = newscategory[index].textContent;//カテゴリーの名前
-  let categorynum;
   if(index == 1 || index == 8 || index == 9)categorynum = 0;
   if(index == 2)categorynum = 1;
   if(index == 3)categorynum = 2;
   if(index == 4 || index == 5)categorynum = 3;
   if(index == 6 || index == 7)categorynum = 4;
+console.log(categorynum);
 
 
-  if(document.querySelectorAll("#gnSec li").length > 0){//記事ページなら
+  if(document.querySelectorAll("#uamods").length > 0){//記事ページなら
     let urlog = kiroku.map(function(o){ return o.url });//urlのみの配列
     let found = urlog.find(function(elem) { return elem === url; });
     if(!found){
-      let saishin = { timestamp: Date.now(), category: categorytext, number:categorynum,url: url, mode:mode};
+      let saishin = { timestamp: Date.now(), category: categorytext, number:categorynum,url: url, mode:mode, good:good, src: document.querySelector(".sc-dfVpRl.hSMPBB").textContent};
+// ".sc-jtRfpW.qmvEp"".sc-esjQYD.dnnyHJ"
       kiroku.push(saishin);
       chrome.storage.sync.set({'kiroku': kiroku}, function () { console.log("新しく保存"); });
       if(categorynum == 0) balance[0] += 1;
@@ -135,7 +153,7 @@ function countlist(balance){// カテゴリごとの閲覧回数のリスト表�
 }
 
 function osbutton(minindex){//おすすめボタン
-  console.log(minindex);//0,1,2,3,4
+  console.log("min:"+ minindex);//0,1,2,3,4
   let e = document.createElement("button");
   e.id = "osbutton";
   e.classList.add("recommended");
@@ -200,14 +218,14 @@ function changescreen(rate){ //画面変化
   var obj3 = document.querySelector('body');
   if(rate <= 0.16){//0.3
     console.log("とても偏ってる！")
-    if(maxindex == index){
+    if(maxindex === index){
     obj.classList.add("very-unbalanced");
     obj2.classList.add("very-unbalanced");
     obj3.classList.add("very-unbalanced");
     obj3.style.webkitTransform = "rotate(1.5deg)";
     }
   }else if(rate <= 0.2){//0.4
-    if(maxindex == index){
+    if(maxindex === index){
     console.log("偏ってる！")
     obj.classList.add("unbalanced");
     obj2.classList.add("unbalanced");
@@ -220,25 +238,59 @@ function changescreen(rate){ //画面変化
 }//penalty function
 
 function chartposition(){
-  let element2 = document.createElement("div");//<div></div>
-  element2.className = "chart";
-  let element3 = document.createElement("div");
+  let chart = document.createElement("div");
+  chart.className = "chart";//<div class="chart"><div>
 
-  if(document.querySelector("#yjnSub")){//#yjnSubの配列があれば
-    let parentElement = document.querySelector("#yjnSub");
-    let referenceElement = document.querySelector("#yjnFixableArea");
-    console.log("yjnSub");
-    parentElement.insertBefore(element2, referenceElement);
+    let parent = document.querySelector("#yjnSub");
+    let reference = document.querySelector("#yjnFixableArea");
+    parent.insertBefore(chart, reference);
 
-  }else{
-    let parentElement = document.querySelector("#sub");
-    let referenceElement = document.querySelector("#fixedArea");
-    console.log("sub");
-    parentElement.insertBefore(element2, referenceElement);
+    if(document.querySelectorAll("#uamods").length > 0){
+      let e = document.createElement("button");
+      e.id = "goodbutton";
+      e.textContent = "いいね";
+      parent.insertBefore(e, reference);
+      e.onclick = function(){
+        good = good == 1 ? 0 : 1;
+        console.log(good);
+        sendgood();
+        chrome.storage.sync.set({'good': good}, function () {console.log("good:"+good);});
+      }
+    }
+    function sendgood(){
+         if (good == 1){
+           console.log("good!");
+           let e = document.createElement("button");
+             e.textContent = "いいねした";
+             let currentsrc = document.querySelector(".sc-dfVpRl.hSMPBB").textContent;
+             console.log(currentsrc);
 
-  }
+             // let srcMap = new Map();
+             // for(let i =0; i<srclog.length;i++){
+             //   srcMap.set(i,srclog[i]);
+             //  console.log(srclog);
+             //   console.log(srcMap);
+             // }
+
+             if(srcMap.has(currentsrc)){
+               srcMap.get(currentsrc)= srcMap.get(currentsrc)+1 ;
+               srclog = srcMap.entries();
+               chrome.storage.sync.set({'srclog': srclog}, function () { console.log("新しくsrcを保存"); });
+             }else{
+               srcMap.set(currentsrc,1);
+               srclog = srcMap.entries();
+               console.log(srclog);
+               chrome.storage.sync.set({'srclog': srclog}, function () { console.log("新しくsrcを保存２"); });
+
+             }
+         }
+         else if(good == 0){
+           console.log("good取り消し");
+           e.textContent = "いいね";
+         }
+     }
   const indexurl = chrome.runtime.getURL("index.html");
-  loadFileToElement(element2, indexurl, afterLoad, setup);//
+  loadFileToElement(chart, indexurl, afterLoad, setup);//
 }
 
 
